@@ -1,0 +1,7 @@
+int no1 = read();
+int no2 = read()
+int no3 = read();
+int sum = no1 + no2 + no3;
+int ms = sum / 3;
+display(ms);
+exit;

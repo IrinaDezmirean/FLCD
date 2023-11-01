@@ -1,0 +1,12 @@
+int array[8] = [3, 66, 17, 99, 14, 21, 9, 37];
+int number;
+for number in array
+{
+if number % 7 == 0
+{
+display(number);
+exit;
+}
+}
+display(“error”);
+exit;

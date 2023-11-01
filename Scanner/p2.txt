@@ -1,0 +1,18 @@
+int no1 = 34;
+int no2 = 100;
+int no3 = 77;
+int max = no1;
+if no1 > max
+{
+max = no1;
+}
+elseif no2 > max
+{
+max = no2;
+}
+elseif no3 > max
+{
+max = no3;
+}
+display(max);
+exit;
