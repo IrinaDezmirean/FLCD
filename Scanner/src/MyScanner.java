@@ -4,7 +4,7 @@ import java.util.*;
 
 class Pair<K,V>
 {
-    K token;   // 0 for tokens, 1 for identifiers, 2 for constants
+    K token; 
     V position;
 
     public Pair(K t, V p)
