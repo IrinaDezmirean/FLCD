@@ -60,7 +60,7 @@ public class FiniteAutomata
                     {
                         checkIfDfa(transitionElems[0],transitionElems[1].charAt(0));
                     }
-                   
+
 
                     this.transitions.add(new Transition(transitionElems[0],transitionElems[1].charAt(0),transitionElems[2]));
                     if(!this.states.contains(transitionElems[0]))
@@ -121,6 +121,31 @@ public class FiniteAutomata
     public boolean isDfa()
     {
         return isDfa;
+    }
+
+    public List<String> getStates()
+    {
+        return this.states;
+    }
+
+    public List<Character> getAlphabet()
+    {
+        return this.alphabet;
+    }
+
+    public List<Transition> getTransitions()
+    {
+        return transitions;
+    }
+
+    public String getInitialState()
+    {
+        return initialState;
+    }
+
+    public List<String> getFinalStates()
+    {
+        return finalStates;
     }
 
     @Override
