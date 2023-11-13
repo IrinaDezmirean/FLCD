@@ -3,6 +3,7 @@ char
 string
 boolean
 for
+in
 if
 else
 elseif
