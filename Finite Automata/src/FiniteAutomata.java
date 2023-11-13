@@ -25,6 +25,15 @@ public class FiniteAutomata
         readFiniteAutomataFormFile(filename);
     }
 
+    public void checkIfDfa(String fromState, char label)
+    {
+        for(Transition tran: transitions)
+        {
+            if(tran.getFromState().equals(fromState) && tran.getLabel().equals(label))
+                isDfa = false;
+        }
+    }
+
     public void readFiniteAutomataFormFile(String filename)
     {
         int lineNo = -1;
@@ -46,6 +55,13 @@ public class FiniteAutomata
                 else
                 {
                     String[] transitionElems = line.split(",");
+
+                    if(isDfa)
+                    {
+                        checkIfDfa(transitionElems[0],transitionElems[1].charAt(0));
+                    }
+                   
+
                     this.transitions.add(new Transition(transitionElems[0],transitionElems[1].charAt(0),transitionElems[2]));
                     if(!this.states.contains(transitionElems[0]))
                     {
@@ -59,10 +75,6 @@ public class FiniteAutomata
                     {
                         this.alphabet.add(transitionElems[1].charAt(0));
                     }
-
-                    // check if is dfa
-                    if(this.states.contains(transitionElems[0]) && this.states.contains(transitionElems[1].charAt(0)))
-                        isDfa = false;
                 }
 
             }
@@ -88,26 +100,27 @@ public class FiniteAutomata
 
     public boolean sequenceIsAccepted(String sequence) // ONLY FOR DFA
     {
-        if(isDfa)
+        String currentState = initialState;
+        for (int i = 0; i < sequence.length(); i++)
         {
-            String currentState = initialState;
-            for (int i = 0; i < sequence.length(); i++)
-            {
-                String nextState = getNextStateFromCurrentStateWithLabel(currentState, sequence.charAt(i));
-                if (nextState == null)
-                    return false;
-                else
-                {
-                    currentState = nextState;
-                }
-            }
-            if (finalStates.contains(currentState))
-                return true;
-            else
+            String nextState = getNextStateFromCurrentStateWithLabel(currentState, sequence.charAt(i));
+            if (nextState == null)
                 return false;
+            else
+            {
+                currentState = nextState;
+            }
         }
+        if (finalStates.contains(currentState))
+            return true;
         else
             return false;
+
+    }
+
+    public boolean isDfa()
+    {
+        return isDfa;
     }
 
     @Override
