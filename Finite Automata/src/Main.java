@@ -23,9 +23,6 @@ public class Main
         String filename = scanner.nextLine();
         FiniteAutomata fa = new FiniteAutomata(filename);
 
-        System.out.println("Input sequence: ");
-        String sequence = scanner.nextLine();
-
         menu();
 
         boolean running = true;
@@ -34,6 +31,7 @@ public class Main
         {
             System.out.println("Choose option: ");
             int option = scanner.nextInt();
+            scanner.nextLine();
 
             if(option == 1)
             {
@@ -64,6 +62,9 @@ public class Main
             {
                 if(fa.isDfa())
                 {
+                    System.out.println("Input sequence: ");
+                    String sequence = scanner.nextLine();
+
                     if(fa.sequenceIsAccepted(sequence))
                         System.out.println(sequence + " is accepted");
                     else
