@@ -113,7 +113,7 @@ public class MyScanner
 
     public boolean isStringConst(String accumulator)
     {
-        if(accumulator.matches("(['\\\"])(.*?)\\\\1"))
+        if(accumulator.matches("(\"|')(.*?)(\\1)"))
             return true;
         return false;
     }
@@ -127,8 +127,7 @@ public class MyScanner
 
     public boolean isConstant(String accumulator)
     {
-        if(accumulator.charAt(0) == '“')
-            accumulator = accumulator.substring(1, accumulator.length() - 1);
+        accumulator = accumulator.replaceAll("[“”]", "\"");
 
         if(isIntConstant(accumulator) || isStringConst(accumulator) || isBoolConstant(accumulator))
             return true;
