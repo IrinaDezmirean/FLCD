@@ -1,3 +1,5 @@
+import FiniteAutomata.FiniteAutomata;
+
 import java.io.*;
 import java.util.*;
 
@@ -26,6 +28,8 @@ public class MyScanner
     private SymbolTable<Object> stConstants;
     private SymbolTable<Object> stIdentifiers;
     private List<Pair<String, Pair<Integer,Integer>>> pif;
+    private FiniteAutomata identifierFa;
+    private FiniteAutomata intConstFa;
     private int index;
     private int line;
 
@@ -56,6 +60,8 @@ public class MyScanner
         tokens = new ArrayList<>();
         tokens.addAll(tokenize(readFile("token.txt")));
         tokens.add(" ");
+        identifierFa = new FiniteAutomata("identifierFa.txt");
+        intConstFa = new FiniteAutomata("intConstFa.txt");
     }
 
     public boolean isSeparator(char currentCharacter)
@@ -75,9 +81,12 @@ public class MyScanner
 
     public boolean isIdentifier(String accumulator)
     {
-        if(accumulator.matches("^[a-zA-Z_][a-zA-Z_0-9]*$"))
+        if(identifierFa.sequenceIsAccepted(accumulator))
             return true;
         return false;
+//        if(accumulator.matches("^[a-zA-Z_][a-zA-Z_0-9]*$"))
+//            return true;
+//        return false;
     }
 
     public void logIdentifier(String identifier)
@@ -95,13 +104,40 @@ public class MyScanner
         }
     }
 
+    public boolean isIntConstant(String accumulator)
+    {
+        if(intConstFa.sequenceIsAccepted(accumulator))
+            return true;
+        return false;
+    }
+
+    public boolean isStringConst(String accumulator)
+    {
+        if(accumulator.matches("(['\\\"])(.*?)\\\\1"))
+            return true;
+        return false;
+    }
+
+    public boolean isBoolConstant(String accumulator)
+    {
+        if(accumulator.matches("true|false"))
+            return true;
+        return false;
+    }
+
     public boolean isConstant(String accumulator)
     {
         if(accumulator.charAt(0) == '“')
             accumulator = accumulator.substring(1, accumulator.length() - 1);
-        if(accumulator.matches("(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|[-+]?[0-9]+|true|false|'[^']*'|[a-zA-Z_][a-zA-Z0-9_]*)"))
+
+        if(isIntConstant(accumulator) || isStringConst(accumulator) || isBoolConstant(accumulator))
             return true;
         return false;
+//        if(accumulator.charAt(0) == '“')
+//            accumulator = accumulator.substring(1, accumulator.length() - 1);
+//        if(accumulator.matches("(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|[-+]?[0-9]+|true|false|'[^']*'|[a-zA-Z_][a-zA-Z0-9_]*)"))
+//            return true;
+//        return false;
     }
 
     public void logConstant(String constant)
@@ -211,13 +247,6 @@ public class MyScanner
                     line++;
                 }
             }
-//            else if(currentCharacter == '\n')
-//            {
-//                if(!accumulator.isEmpty())
-//                    detectToken(accumulator); // ; before new line
-//                accumulator = "";
-//                line++;
-//            }
             else
             {
                 accumulator = accumulator + currentCharacter;
@@ -232,9 +261,9 @@ public class MyScanner
 
         System.out.println("Program " + filename + " is lexically correct");
 
-        String pifFilename = filename.substring(0, filename.length() - 4) + "_PIF.txt";
-        String stIdentFilename = filename.substring(0, filename.length() - 4) + "_ST_IDENTIFIERS.txt";
-        String stConstFilename = filename.substring(0, filename.length() - 4) + "_ST_CONSTANTS.txt";
+        String pifFilename = filename.substring(0, filename.length() - 4) + "FA_PIF.txt";
+        String stIdentFilename = filename.substring(0, filename.length() - 4) + "FA_ST_IDENTIFIERS.txt";
+        String stConstFilename = filename.substring(0, filename.length() - 4) + "FA_ST_CONSTANTS.txt";
 
         writePIFToFile(pifFilename);
         writeSymbolTables(stConstFilename,stIdentFilename);

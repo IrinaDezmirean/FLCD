@@ -8,7 +8,7 @@ public class Main
             scanner.scan("p1.txt");
             //scanner.scan("p2.txt");
             //scanner.scan("p3.txt");
-            scanner.scan("p3_error.txt");
+            //scanner.scan("p3_error.txt");
         }
         catch (Exception e)
         {
