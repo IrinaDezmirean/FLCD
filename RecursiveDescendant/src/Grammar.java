@@ -12,17 +12,19 @@ public class Grammar
     private List<String> terminals;
     private Map<String,List<String>> productions;
 
+    private int lineNo;
+
     public Grammar(String fileName) throws GrammarException
     {
         nonterminals = new ArrayList<>();
         terminals = new ArrayList<>();
         productions = new HashMap<>();
+        lineNo = 0;
         readFromFile(fileName);
     }
 
     private void readFromFile(String fileName) throws GrammarException
     {
-        int lineNo = -1;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName)))
         {
@@ -31,7 +33,7 @@ public class Grammar
             {
                 lineNo++;
 
-                String[] sides = line.split( " = ");
+                String[] sides = line.split( " = ", 2);
 
                 // split the sides of production and check the format
                 if(sides.length != 2)
@@ -76,9 +78,15 @@ public class Grammar
                 if(!this.terminals.contains(token))
                     this.terminals.add(token);
             }
+            // exception for bool operators < > <= >=
+            else if(token.equals("<") || token.equals(">") || token.equals("<=") || token.equals(">="))
+            {
+                if(!this.terminals.contains(token))
+                    this.terminals.add(token);
+            }
             else
             {
-                throw new GrammarException("Wrong format for token: " + token);
+                throw new GrammarException("Wrong format for token: " + token + " at line: "+lineNo);
             }
         }
     }
