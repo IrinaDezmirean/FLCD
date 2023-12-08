@@ -14,6 +14,8 @@ public class Grammar
 
     private int lineNo;
 
+    private boolean isCFG=true;
+
     public Grammar(String fileName) throws GrammarException
     {
         nonterminals = new ArrayList<>();
@@ -97,6 +99,9 @@ public class Grammar
         rightHandSide = rightHandSide.replace("<","").replace(">","");
         String[] leftTokens = leftHandSide.split(" ");
 
+        if (leftTokens.length >1)
+            isCFG=false;
+
         // in case we have multiple letters on right hand side
         for(String leftToken: leftTokens)
         {
@@ -114,6 +119,25 @@ public class Grammar
         }
     }
 
+    public void printProductionsForNonterminal(String nonterminal) {
+        // Check if the nonterminal exists
+        if (!nonterminals.contains(nonterminal)) {
+            System.out.println("Non-terminal '" + nonterminal + "' does not exist in the grammar.");
+            return;
+        }
+
+        List<String> productionList = productions.get(nonterminal);
+        if (productionList == null || productionList.isEmpty()) {
+            System.out.println("There are no productions for the non-terminal '" + nonterminal+"'");
+        } else {
+            System.out.println("Productions for non-terminal '" + nonterminal + "':");
+            for (String production : productionList) {
+                System.out.println(nonterminal + " = " + production);
+            }
+        }
+    }
+
+
     public List<String> getNonterminals()
     {
         return nonterminals;
@@ -127,6 +151,14 @@ public class Grammar
     public Map<String,List<String>> getProductions()
     {
         return productions;
+    }
+
+    public boolean getIsCFG() {
+        return isCFG;
+    }
+
+    public void setCFG(boolean CFG) {
+        isCFG = CFG;
     }
 
 }
